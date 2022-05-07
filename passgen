@@ -8,8 +8,7 @@ len=$1
 
 passwd(){  
 pass=$(tr -dc "A-Za-z0-9_#$%&()[]+-"< /dev/urandom | head -c $len | xargs)
-echo $pass | xclip -selection -c
-notify-send "Password copied"
+echo $pass 
 echo "Would you like to save&encrypt your password?[y/n]"
 read sve
 if [ "$sve" = "y" ]
