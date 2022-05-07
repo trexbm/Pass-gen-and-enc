@@ -1,0 +1,31 @@
+#!/bin/bash
+
+len=$1
+useage(){
+	printf "usage:\npassgen <LENGTH>" | xargs
+}
+len=$1
+
+passwd(){  
+pass=$(tr -dc "A-Za-z0-9_#$%&()[]+-"< /dev/urandom | head -c $len | xargs)
+echo $pass | xclip -selection -c
+notify-send "Password copied"
+echo "Would you like to save&encrypt your password?[y/n]"
+read sve
+if [ "$sve" = "y" ]
+then
+	mkdir passwds
+	touch passwds/savedpass
+	echo $pass >> passwds/savedpass
+	openssl enc -aes-256-cbc -base64 -in passwds/savedpass -out passwds/enc
+else
+	exit 1
+fi
+}
+
+if [ -n "$len" ]
+then
+	passwd
+else
+	useage
+fi
